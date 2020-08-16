@@ -5,20 +5,20 @@ using VRP.UtilityControl.BL.Model;
 
 namespace VRP.UtilityControl.BL.Controller
 {
-    public class PaymentController : BaseController
+    public class BillController : BaseController
     {
         #region Свойства
         private const string UTILITIES_DATA_FILE = "utilities.dat";
-        private const string PAYMENTS_DATA_FILE = "payments.dat";
+        private const string BILLS_DATA_FILE = "bills.dat";
         private readonly User user;
         public List<Utility> Utilities { get; }
-        public Payment Payment { get; }
+        public Bill Bill { get; }
         #endregion
-        public PaymentController(User user)
+        public BillController(User user)
         {
             this.user = user ?? throw new ArgumentNullException("Пользователь не может быть пустым.", nameof(user));
             Utilities = GetUtilities();
-            Payment = GetPayment();
+            Bill = GetBill();
         }
         public void Add(Utility utility, decimal money)
         {
@@ -26,18 +26,18 @@ namespace VRP.UtilityControl.BL.Controller
             if(newUtility == null)
             {
                 Utilities.Add(utility);
-                Payment.Add(utility, money);
+                Bill.Add(utility, money);
             }
             else
             {
-                Payment.Add(newUtility, money);
+                Bill.Add(newUtility, money);
             }
             Save();
         }
 
-        private Payment GetPayment()
+        private Bill GetBill()
         {
-            return Load<Payment>(PAYMENTS_DATA_FILE) ?? new Payment(user);
+            return Load<Bill>(BILLS_DATA_FILE) ?? new Bill(user);
         }
 
         private List<Utility> GetUtilities()
@@ -47,7 +47,7 @@ namespace VRP.UtilityControl.BL.Controller
         public void Save()
         {
             Save(UTILITIES_DATA_FILE, Utilities);
-            Save(PAYMENTS_DATA_FILE, Payment);
+            Save(BILLS_DATA_FILE, Bill);
         }
     }
 }

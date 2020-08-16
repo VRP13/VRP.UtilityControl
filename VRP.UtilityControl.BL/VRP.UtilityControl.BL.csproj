@@ -43,8 +43,10 @@
   <ItemGroup>
     <Compile Include="Controller\BaseController.cs" />
     <Compile Include="Controller\PaymentController.cs" />
+    <Compile Include="Controller\BillController.cs" />
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Model\Payment.cs" />
+    <Compile Include="Model\Bill.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\Utility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -18,8 +18,9 @@ namespace VRP.UtilityControl.CMD
             var name = Console.ReadLine();
             
             var userController = new UserController(name);
+            var billController = new BillController(userController.CurrentUser);
             var paymentController = new PaymentController(userController.CurrentUser);
-            if(userController.IsNewUser)
+            if (userController.IsNewUser)
             {
                 Console.WriteLine("Введите название вашего города:");
                 var city = Console.ReadLine();
@@ -36,22 +37,42 @@ namespace VRP.UtilityControl.CMD
             }
             Console.WriteLine(userController.CurrentUser);
 
-            Console.WriteLine("Для внесения нового платежа нажмите клавишу 'E'.");
-            var key = Console.ReadKey();
-            Console.WriteLine();
-            if(key.Key == ConsoleKey.E)
+            while (true)
             {
-                var utilities = EnterPayment();
-                paymentController.Add(utilities.Utility, utilities.Money);
-                foreach(var item in paymentController.Payment.Bills)
+                Console.WriteLine("Для продолжения выберите действие:");
+                Console.WriteLine("Чтобы ввести новый счет нажмите клавишу 'B'.");
+                Console.WriteLine("Чтобы ввести новый платеж нажмите клавишу 'P'.");
+                Console.WriteLine("Для выхода из приложения нажмите клавишу 'Q'.");
+                var key = Console.ReadKey();
+                Console.WriteLine();
+
+                switch (key.Key)
                 {
-                    Console.WriteLine($"\t{item.Key} - {item.Value}");
+                    case ConsoleKey.B:
+                        var utilitiesB = EnterBill();
+                        billController.Add(utilitiesB.Utility, utilitiesB.Money);
+                        foreach (var item in billController.Bill.Bills)
+                        {
+                            Console.WriteLine($"\t{item.Key} - {item.Value}");
+                        }
+                        break;
+                    case ConsoleKey.P:
+                        var utilitiesP = EnterPayment();
+                        paymentController.Add(utilitiesP.Utility, utilitiesP.Money);
+                        foreach (var item in paymentController.Payment.Payments)
+                        {
+                            Console.WriteLine($"\t{item.Key} - {item.Value}");
+                        }
+                        break;
+                    case ConsoleKey.Q:
+                        Environment.Exit(0);
+                        break;
                 }
+                Console.ReadLine();
             }
-            Console.ReadLine();
         }
 
-        private static (Utility Utility, decimal Money) EnterPayment()
+        private static (Utility Utility, decimal Money) EnterBill()
         {
             Console.WriteLine("Введите название коммунальной услуги: ");
             var utility = Console.ReadLine();
@@ -64,11 +85,24 @@ namespace VRP.UtilityControl.CMD
             var newUtility = new Utility(utility, tariff, volume);
             return (Utility: newUtility, Money: money);
         }
+        private static (Utility Utility, decimal Money) EnterPayment()
+        {
+            Console.WriteLine("Введите название коммунальной услуги: ");
+            var utility = Console.ReadLine();
+
+            var money = ParseMoney();
+            var tariff = ParseTariff();
+            var volume = ParseVolume();
+
+
+            var newUtility = new Utility(utility, tariff, volume);
+            return (Utility: newUtility, Money: money);
+        }
         private static decimal ParseMoney()
         {
             while(true)
             {
-                Console.WriteLine("Введите уплаченную сумму(руб.): ");
+                Console.WriteLine("Введите денежную сумму(руб.): ");
                 if(decimal.TryParse(Console.ReadLine(), out decimal value))
                 {
                     return value;

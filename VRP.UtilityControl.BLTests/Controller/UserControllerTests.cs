@@ -16,10 +16,10 @@ namespace VRP.UtilityControl.BL.Controller.Tests
         public void SetNewUserDataTest()
         {
             var name = Guid.NewGuid().ToString();
-            var city = "Челябинск";
-            var street = "Российская";
-            var house = "303";
-            var flat = "22";
+            var city = "Ивановск";
+            var street = "Ивановская";
+            var house = "228";
+            var flat = "322";
             var controller = new UserController(name);
             controller.SetNewUserData(city, street, house, flat);
             var controller2 = new UserController(name);

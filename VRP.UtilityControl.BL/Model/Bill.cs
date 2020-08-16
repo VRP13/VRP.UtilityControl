@@ -5,29 +5,29 @@ using System.Linq;
 namespace VRP.UtilityControl.BL.Model
 {
     [Serializable]
-    public class Payment
+    public class Bill
     {
         #region Свойства
         public User User { get; }
         public DateTime Date { get; }
-        public Dictionary<Utility, decimal> Payments { get; }
+        public Dictionary<Utility, decimal> Bills { get; }
         #endregion
-        public Payment(User user)
+        public Bill(User user)
         {
             User = user ?? throw new ArgumentNullException("Пользователь не может быть пустым.", nameof(user));
             Date = DateTime.Today;
-            Payments = new Dictionary<Utility, decimal>();
+            Bills = new Dictionary<Utility, decimal>();
         }
         public void Add(Utility Utility, decimal Money)
         {
-            var utility = Payments.Keys.FirstOrDefault(u => u.Name.Equals(Utility.Name));
+            var utility = Bills.Keys.FirstOrDefault(u => u.Name.Equals(Utility.Name));
             if(utility == null)
             {
-                Payments.Add(Utility, Money);
+                Bills.Add(Utility, Money);
             }
             else
             {
-                Payments[utility] += Money;
+                Bills[utility] += Money;
             }
         }
     }
